@@ -5,8 +5,6 @@ import (
   "log"
   "github.com/gorilla/mux"
   "encoding/json"
-  //"math/rand"
-  //"fmt"
   "gopkg.in/mgo.v2"
   "gopkg.in/mgo.v2/bson"
 )
@@ -71,11 +69,6 @@ func RecipesHandler(w http.ResponseWriter, r *http.Request) {
     err := collection.Find(nil).All(&myrecipes)
     if err != nil { panic (err) }
 
-    //result := Kitten{}
-    //for iter.Next(&result) {
-    //    mykittens = append(mykittens, result)
-    //}
-
     w.Header().Set("Content-Type", "application/json")
     j, err := json.Marshal(RecipesJSON{Recipes: myrecipes})
     if err != nil { panic (err) }
@@ -138,7 +131,7 @@ func DeleteRecipeHandler(w http.ResponseWriter, r *http.Request) {
     w.WriteHeader(http.StatusNoContent)
 }
 func main() {
-    log.Println("Starting Server 2")
+    log.Println("Starting HTTP Server.")
 
     r := mux.NewRouter()
     r.HandleFunc("/api/recipes", RecipesHandler).Methods("GET")
@@ -150,7 +143,7 @@ func main() {
 
     http.Handle("/", http.FileServer(http.Dir("public")))
 
-    log.Println("Starting mongo db session")
+    log.Println("Starting MongoDB session.")
     var err error
     session, err = mgo.Dial("localhost")
     if err != nil { panic (err) }
